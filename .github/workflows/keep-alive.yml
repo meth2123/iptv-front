@@ -1,0 +1,20 @@
+name: Keep Proxy Alive
+
+on:
+  schedule:
+    - cron: '*/4 * * * *'  # Toutes les 4 minutes
+  workflow_dispatch:
+
+jobs:
+  restart:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Fly CLI
+        run: curl -L https://fly.io/install.sh | sh
+
+      - name: Start Proxy Machine
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+          export PATH="$HOME/.fly/bin:$PATH"
+          fly machine start 0807245b3d6308 --app iptv-proxy-snowy-breeze-2322
